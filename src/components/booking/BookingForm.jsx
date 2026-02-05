@@ -2,6 +2,7 @@ import { Controller, useForm } from "react-hook-form"
 import Button from "../ui/Button"
 import { formatCurrency } from "../../utils/format"
 import DatePicker from "./DatePicker"
+import TimePicker from "./TimePicker"
 
 const inputStyles =
   "w-full rounded-2xl border bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500 dark:border-slate-700 dark:bg-slate-950"
@@ -27,46 +28,68 @@ const BookingForm = ({ service, onSubmit, isLoading, error }) => {
           </div>
         </div>
       </div>
-      <div className="grid gap-3 md:grid-cols-2">
-        <div className="flex flex-col gap-1 text-sm">
-          <label className="text-xs font-semibold text-slate-500">Full name</label>
-          <input
-            className={inputStyles}
-            placeholder="Alex Johnson"
-            {...register("name", { required: "Name is required" })}
-          />
-          {errors.name ? (
-            <span className="text-xs text-rose-500">{errors.name.message}</span>
-          ) : null}
-        </div>
-        <div className="flex flex-col gap-1 text-sm">
-          <label className="text-xs font-semibold text-slate-500">Email</label>
-          <input
-            className={inputStyles}
-            placeholder="alex@email.com"
-            type="email"
-            {...register("email", { required: "Email is required" })}
-          />
-          {errors.email ? (
-            <span className="text-xs text-rose-500">
-              {errors.email.message}
-            </span>
-          ) : null}
-        </div>
-      </div>
-      <div className="grid gap-3 md:grid-cols-2">
-        <div className="flex flex-col gap-1 text-sm">
-          <label className="text-xs font-semibold text-slate-500">Phone</label>
-          <input
-            className={inputStyles}
-            placeholder="+1 (000) 123-4567"
-            {...register("phone", { required: "Phone is required" })}
-          />
-          {errors.phone ? (
-            <span className="text-xs text-rose-500">
-              {errors.phone.message}
-            </span>
-          ) : null}
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1 text-sm">
+            <label className="text-xs font-semibold text-slate-500">Full name</label>
+            <input
+              className={inputStyles}
+              placeholder="Alex Johnson"
+              {...register("name", { required: "Name is required" })}
+            />
+            {errors.name ? (
+              <span className="text-xs text-rose-500">{errors.name.message}</span>
+            ) : null}
+          </div>
+          <div className="flex flex-col gap-1 text-sm">
+            <label className="text-xs font-semibold text-slate-500">Email</label>
+            <input
+              className={inputStyles}
+              placeholder="alex@email.com"
+              type="email"
+              {...register("email", { required: "Email is required" })}
+            />
+            {errors.email ? (
+              <span className="text-xs text-rose-500">
+                {errors.email.message}
+              </span>
+            ) : null}
+          </div>
+          <div className="flex flex-col gap-1 text-sm">
+            <label className="text-xs font-semibold text-slate-500">Phone</label>
+            <input
+              className={inputStyles}
+              placeholder="+1 (000) 123-4567"
+              {...register("phone", { required: "Phone is required" })}
+            />
+            {errors.phone ? (
+              <span className="text-xs text-rose-500">
+                {errors.phone.message}
+              </span>
+            ) : null}
+          </div>
+          <div className="flex flex-col gap-2 text-sm">
+            <label className="text-xs font-semibold text-slate-500">Time</label>
+            <Controller
+              control={control}
+              name="time"
+              rules={{ required: "Time is required" }}
+              render={({ field }) => (
+                <TimePicker value={field.value} onChange={field.onChange} />
+              )}
+            />
+            {errors.time ? (
+              <span className="text-xs text-rose-500">{errors.time.message}</span>
+            ) : null}
+          </div>
+          <div className="flex flex-col gap-1 text-sm">
+            <label className="text-xs font-semibold text-slate-500">Notes</label>
+            <input
+              className={inputStyles}
+              placeholder="Any special request?"
+              {...register("notes")}
+            />
+          </div>
         </div>
         <div className="flex flex-col gap-2 text-sm">
           <label className="text-xs font-semibold text-slate-500">Date</label>
@@ -81,27 +104,6 @@ const BookingForm = ({ service, onSubmit, isLoading, error }) => {
           {errors.date ? (
             <span className="text-xs text-rose-500">{errors.date.message}</span>
           ) : null}
-        </div>
-      </div>
-      <div className="grid gap-3 md:grid-cols-2">
-        <div className="flex flex-col gap-1 text-sm">
-          <label className="text-xs font-semibold text-slate-500">Time</label>
-          <input
-            className={inputStyles}
-            type="time"
-            {...register("time", { required: "Time is required" })}
-          />
-          {errors.time ? (
-            <span className="text-xs text-rose-500">{errors.time.message}</span>
-          ) : null}
-        </div>
-        <div className="flex flex-col gap-1 text-sm">
-          <label className="text-xs font-semibold text-slate-500">Notes</label>
-          <input
-            className={inputStyles}
-            placeholder="Any special request?"
-            {...register("notes")}
-          />
         </div>
       </div>
       {error ? (

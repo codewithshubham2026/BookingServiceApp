@@ -12,8 +12,12 @@ Live Deployment Link - https://booking-service-app-sigma.vercel.app
 - **Service Listing**: Search, filters, sorting, pagination, loading and empty states
 - **Custom UI Components**: Beautiful dropdown component with animations and keyboard navigation
 - **Service Details**: Gallery, highlights, and related services
-- **Booking Flow**: React Hook Form, calendar date picker, and localStorage persistence
+- **Booking Flow**: React Hook Form, custom calendar date picker, custom time picker, and localStorage persistence
   - Authentication required to book services
+  - Scrollable modal with body scroll lock
+  - Two-column layout (inputs on left, date picker on right)
+  - Animated success confirmation with green checkmark
+  - Direct navigation to bookings page after confirmation
 - **Favorites**: Save services to favorites with localStorage persistence
   - Authentication required to save favorites
 - **AI FAQ Assistant**: Gemini 2.5 Flash integration (free tier) with rule-based fallback and typing indicator
@@ -23,7 +27,7 @@ Live Deployment Link - https://booking-service-app-sigma.vercel.app
 - `src/components`
   - `auth/` - Authentication components (ProtectedRoute)
   - `assistant/` - AI chat assistant components
-  - `booking/` - Booking form and modal components
+  - `booking/` - Booking form, modal, date picker, time picker, and success components
   - `common/` - Shared components (EmptyState, ErrorState)
   - `layout/` - Layout components (Navbar, Footer)
   - `services/` - Service-related components (ServiceCard, FilterBar)
@@ -100,6 +104,13 @@ Live Deployment Link - https://booking-service-app-sigma.vercel.app
 - **ServiceCard**: Service listing card with favorite toggle
 - **FilterBar**: Advanced filtering with custom dropdowns
 - **SearchBar**: Real-time search with debouncing
+
+### Booking
+- **BookingModal**: Scrollable modal with body scroll lock, prevents background scrolling
+- **BookingForm**: Two-column layout with inputs on left, date picker on right
+- **DatePicker**: Custom calendar component with month navigation
+- **TimePicker**: Custom time picker with hour/minute selection dropdown
+- **BookingSuccess**: Animated success screen with green checkmark animation and navigation to bookings page
 
 ## Interview and Real-world Discussion Points
 - Tradeoffs of client-side filtering vs server-side filtering

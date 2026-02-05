@@ -299,19 +299,35 @@ booking_service_app/
 
 1. **Create BookingModal** (`src/components/booking/BookingModal.jsx`)
    - Modal wrapper for booking form
+   - Scrollable content with proper layout
+   - Body scroll lock when modal is open
+   - Responsive design with proper spacing
 
 2. **Create BookingForm** (`src/components/booking/BookingForm.jsx`)
    - Form with React Hook Form
-   - Date picker integration
-   - Form validation
+   - Two-column layout: inputs on left, date picker on right
+   - Form validation with error messages
 
 3. **Create DatePicker** (`src/components/booking/DatePicker.jsx`)
    - Custom date selection component
+   - Month navigation with previous/next buttons
+   - Calendar grid with day selection
+   - Past date disabling
 
-4. **Create BookingSuccess** (`src/components/booking/BookingSuccess.jsx`)
-   - Success confirmation screen
+4. **Create TimePicker** (`src/components/booking/TimePicker.jsx`)
+   - Custom time picker with dropdown
+   - Hour selection (0-23) with scrollable list
+   - Minute selection (0, 15, 30, 45) intervals
+   - 12-hour format display with AM/PM
+   - Styled scrollbar for hour list
 
-5. **Create BookingsPage** (`src/pages/BookingsPage.jsx`)
+5. **Create BookingSuccess** (`src/components/booking/BookingSuccess.jsx`)
+   - Animated success confirmation screen
+   - Green checkmark animation with scale and path drawing
+   - Staggered content animations
+   - "View My Bookings" button with navigation
+
+6. **Create BookingsPage** (`src/pages/BookingsPage.jsx`)
    - User's booking history
 
 ### Phase 9: Favorites Feature (30-45 min)
@@ -386,6 +402,12 @@ createRoot(document.getElementById("root")).render(
 2. **Route Configuration** - Defines all app routes
 3. **Protected Routes** - Wraps authenticated pages
 4. **Global Components** - BookingModal, SupportAssistant, Toast
+
+**BookingModal Features:**
+- Scrollable modal content with proper overflow handling
+- Body scroll lock when modal is open (prevents background scrolling)
+- Responsive padding and spacing
+- Click outside to close functionality
 
 **Code Structure:**
 ```javascript
@@ -494,21 +516,36 @@ const { register, control, handleSubmit, formState: { errors } } = useForm()
 // Register input
 <input {...register("name", { required: "Name is required" })} />
 
-// Controller for custom components
+// Controller for custom components (DatePicker and TimePicker)
 <Controller
   control={control}
   name="date"
   rules={{ required: "Date is required" }}
-  render={({ field }) => <DatePicker {...field} />}
+  render={({ field }) => <DatePicker value={field.value} onChange={field.onChange} />}
+/>
+
+<Controller
+  control={control}
+  name="time"
+  rules={{ required: "Time is required" }}
+  render={({ field }) => <TimePicker value={field.value} onChange={field.onChange} />}
 />
 ```
+
+**Layout Structure:**
+- Two-column grid layout on medium screens and up
+- Left column: All input fields (name, email, phone, time, notes)
+- Right column: Date picker calendar
+- Responsive: Stacks vertically on mobile
 
 **Teaching Points:**
 - Why React Hook Form? (performance, less re-renders)
 - `register` - Connects input to form state
-- `Controller` - For custom components
+- `Controller` - For custom components (DatePicker, TimePicker)
 - Validation rules
 - Error handling
+- Responsive layout patterns
+- Form organization and UX
 
 ### 5.7 Custom Hooks (`useDebounce.js`)
 
@@ -534,7 +571,143 @@ function useDebounce(value, delay = 500) {
 - Cleanup in useEffect (clear timeout)
 - Why debounce search? (reduce API calls)
 
-### 5.8 Gemini API Integration (`src/services/gemini.js`)
+### 5.8 Custom Time Picker (`src/components/booking/TimePicker.jsx`)
+
+**Component Structure:**
+```javascript
+const TimePicker = ({ value, onChange }) => {
+  const [hours, setHours] = useState(9)
+  const [minutes, setMinutes] = useState(0)
+  const [isOpen, setIsOpen] = useState(false)
+
+  // Parse time string (HH:MM format)
+  const parseTimeString = (timeString) => {
+    if (!timeString) return { hours: 9, minutes: 0 }
+    const [hours, minutes] = timeString.split(":").map(Number)
+    return { hours: hours || 9, minutes: minutes || 0 }
+  }
+
+  // Format for display (12-hour with AM/PM)
+  const formatDisplayTime = (h, m) => {
+    const hour12 = h === 0 ? 12 : h > 12 ? h - 12 : h
+    const ampm = h >= 12 ? "PM" : "AM"
+    return `${hour12}:${pad(m)} ${ampm}`
+  }
+}
+```
+
+**Key Features:**
+- Dropdown button showing selected time
+- Hour selection: Scrollable list (0-23) with max-height
+- Minute selection: 15-minute intervals (0, 15, 30, 45)
+- Click outside to close
+- Styled scrollbar for hour list
+- 12-hour format display with AM/PM
+
+**Custom Scrollbar Styling:**
+The project includes custom scrollbar styles in `src/styles/globals.css`:
+```css
+.scrollbar-thin {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgb(203 213 225) transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px; /* Chrome, Safari, Edge */
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: rgb(203 213 225);
+  border-radius: 3px;
+}
+```
+
+**Teaching Points:**
+- Custom dropdown pattern
+- Time parsing and formatting
+- Scrollable lists with max-height (130px)
+- Custom scrollbar styling (cross-browser support)
+- Click outside detection with useRef
+- State management for open/close
+- 12-hour format conversion
+
+### 5.9 Modal Body Scroll Lock (`src/components/booking/BookingModal.jsx`)
+
+**Preventing Background Scroll:**
+```javascript
+useEffect(() => {
+  if (isOpen) {
+    document.body.style.overflow = "hidden"
+  } else {
+    document.body.style.overflow = ""
+  }
+  return () => {
+    document.body.style.overflow = ""
+  }
+}, [isOpen])
+```
+
+**Modal Layout:**
+```javascript
+<MotionDiv className="fixed inset-0 z-40 overflow-y-auto ...">
+  <div className="flex min-h-full items-start justify-center py-4 sm:items-center">
+    <MotionDiv className="my-4 w-full max-w-2xl ... sm:my-8">
+      {/* Modal content */}
+    </MotionDiv>
+  </div>
+</MotionDiv>
+```
+
+**Teaching Points:**
+- Body scroll lock pattern
+- Scrollable modal content
+- Responsive spacing (py-4 sm:py-8)
+- Centering on large screens, top-aligned on mobile
+- Proper z-index management
+
+### 5.10 Animated Success Screen (`src/components/booking/BookingSuccess.jsx`)
+
+**Animation Pattern:**
+```javascript
+<motion.div
+  initial={{ scale: 0 }}
+  animate={{ scale: 1 }}
+  transition={{ type: "spring", stiffness: 200, damping: 15 }}
+>
+  <motion.div
+    initial={{ pathLength: 0, opacity: 0 }}
+    animate={{ pathLength: 1, opacity: 1 }}
+    transition={{ delay: 0.3, duration: 0.5 }}
+  >
+    <CheckCircle className="h-12 w-12 text-white" />
+  </motion.div>
+</motion.div>
+```
+
+**Staggered Content Animation:**
+```javascript
+const [showContent, setShowContent] = useState(false)
+
+useEffect(() => {
+  const timer = setTimeout(() => setShowContent(true), 300)
+  return () => clearTimeout(timer)
+}, [])
+
+<motion.div
+  initial={{ opacity: 0, y: 10 }}
+  animate={{ opacity: showContent ? 1 : 0, y: showContent ? 0 : 10 }}
+  transition={{ delay: 0.5, duration: 0.4 }}
+>
+```
+
+**Teaching Points:**
+- Spring animations for natural feel
+- Path length animation for checkmark drawing
+- Staggered animations for sequential reveal
+- Navigation after success (useNavigate)
+- Removing redundant buttons (only top close button)
+
+### 5.11 Gemini API Integration (`src/services/gemini.js`)
 
 **Environment Variables:**
 ```javascript
@@ -642,23 +815,40 @@ if (!response) {
 1. User clicks "Book now" on ServiceCard
 2. Checks authentication → redirects if not logged in
 3. Opens BookingModal with BookingForm
-4. User fills form (React Hook Form validation)
-5. On submit → dispatches `createBooking()`
-6. Booking saved to Redux and localStorage
-7. Shows success message
-8. Modal closes
+4. Modal locks body scroll (prevents background scrolling)
+5. User fills form with two-column layout:
+   - Left: Personal info inputs (name, email, phone, time, notes)
+   - Right: Date picker calendar
+6. User selects time using custom TimePicker dropdown
+7. On submit → dispatches `createBooking()`
+8. Booking saved to Redux and localStorage
+9. Shows animated success screen with green checkmark
+10. User can click "View My Bookings" to navigate to bookings page
+11. Modal closes
 
 **Key Components:**
-- `BookingModal.jsx` - Modal wrapper
-- `BookingForm.jsx` - Form with validation
-- `DatePicker.jsx` - Date selection
-- `BookingSuccess.jsx` - Success screen
+- `BookingModal.jsx` - Scrollable modal wrapper with body scroll lock
+- `BookingForm.jsx` - Two-column form layout with validation
+- `DatePicker.jsx` - Custom calendar with month navigation
+- `TimePicker.jsx` - Custom time picker with hour/minute dropdown
+- `BookingSuccess.jsx` - Animated success screen with checkmark
+
+**Key Features:**
+- **Modal Layout**: Scrollable content, proper spacing, responsive design
+- **Body Scroll Lock**: Prevents background scrolling when modal is open
+- **Two-Column Layout**: Inputs on left, date picker on right for better UX
+- **Custom Time Picker**: Dropdown with hour (0-23) and minute (15-min intervals) selection
+- **Animated Success**: Green checkmark with scale and path drawing animations
+- **Navigation**: Direct link to bookings page after confirmation
 
 **Teaching Points:**
-- Modal pattern (portal, focus trap)
-- Form validation strategies
-- Date handling
-- Success feedback
+- Modal pattern (portal, focus trap, body scroll lock)
+- Form validation strategies with React Hook Form
+- Date and time handling
+- Custom component design (DatePicker, TimePicker)
+- Animation patterns with Framer Motion
+- Success feedback and user flow
+- Navigation after form submission
 
 ### 6.4 Favorites System
 

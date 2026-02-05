@@ -73,6 +73,11 @@ The following files have been enhanced with detailed comments for teaching:
 - `src/components/layout/Navbar.jsx` - Navigation with conditional rendering
 - `src/components/auth/ProtectedRoute.jsx` - Route guard pattern
 - `src/components/services/SearchBar.jsx` - Controlled component pattern
+- `src/components/booking/BookingModal.jsx` - Scrollable modal with body scroll lock
+- `src/components/booking/BookingForm.jsx` - Two-column form layout
+- `src/components/booking/DatePicker.jsx` - Custom calendar component
+- `src/components/booking/TimePicker.jsx` - Custom time picker with dropdown
+- `src/components/booking/BookingSuccess.jsx` - Animated success screen
 
 ### Hooks
 - `src/hooks/useDebounce.js` - Custom hook with debouncing explanation
@@ -130,9 +135,10 @@ The following files have been enhanced with detailed comments for teaching:
 
 ### Session 5: Advanced Features & Deployment (1 hour)
 1. **Booking Flow** (30 min)
-   - Code: BookingForm, BookingModal
-   - Explain: React Hook Form, validation
+   - Code: BookingForm, BookingModal, DatePicker, TimePicker, BookingSuccess
+   - Explain: React Hook Form, validation, custom components, animations
    - Reference: TEACHING_GUIDE.md Section 6.3
+   - Features: Two-column layout, body scroll lock, custom time picker, animated success
 
 2. **Deployment** (30 min)
    - Follow: TEACHING_GUIDE.md Section 7
