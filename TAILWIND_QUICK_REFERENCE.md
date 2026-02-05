@@ -330,6 +330,22 @@ className="text-2xl md:text-3xl lg:text-4xl"
 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70">
 ```
 
+### Statistics Row Pattern
+```jsx
+<div className="flex flex-wrap items-center gap-6 rounded-2xl border bg-white px-6 py-4 shadow-soft dark:bg-slate-900">
+  <div className="flex flex-col">
+    <span className="text-xs font-medium uppercase tracking-wider text-slate-400">
+      Label
+    </span>
+    <span className="mt-1 text-2xl font-bold text-brand-600">
+      Value
+    </span>
+  </div>
+  <div className="h-8 w-px bg-slate-200 dark:bg-slate-700" />
+  {/* More statistics... */}
+</div>
+```
+
 ---
 
 ## Special Values

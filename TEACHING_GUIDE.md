@@ -270,7 +270,9 @@ booking_service_app/
 ### Phase 6: Services Listing (45-60 min)
 
 1. **Create ServicesPage** (`src/pages/ServicesPage.jsx`)
-   - Main services listing page
+   - Main services listing page with hero section
+   - Hero section includes: heading, description, search bar, and statistics
+   - Statistics displayed in horizontal row (Total services, Categories, Avg. response)
    - Integrates search, filters, pagination
 
 2. **Create ServiceCard** (`src/components/services/ServiceCard.jsx`)
@@ -510,7 +512,57 @@ const ServiceCard = ({
 - Conditional rendering
 - Event handlers
 
-### 5.6 Form Handling (`BookingForm.jsx`)
+### 5.6 Hero Section Statistics (`src/pages/ServicesPage.jsx`)
+
+**Statistics Display Pattern:**
+```javascript
+<div className="flex flex-wrap items-center gap-6 rounded-2xl border border-slate-100 bg-white px-6 py-4 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+  <div className="flex flex-col">
+    <span className="text-xs font-medium uppercase tracking-wider text-slate-400 dark:text-slate-500">
+      Total services
+    </span>
+    <span className="mt-1 text-2xl font-bold text-brand-600 dark:text-brand-500">
+      {pagination.total}
+    </span>
+  </div>
+  <div className="h-8 w-px bg-slate-200 dark:bg-slate-700" />
+  <div className="flex flex-col">
+    <span className="text-xs font-medium uppercase tracking-wider text-slate-400 dark:text-slate-500">
+      Categories
+    </span>
+    <span className="mt-1 text-2xl font-bold text-brand-600 dark:text-brand-500">
+      {categories.length - 1}
+    </span>
+  </div>
+  <div className="h-8 w-px bg-slate-200 dark:bg-slate-700" />
+  <div className="flex flex-col">
+    <span className="text-xs font-medium uppercase tracking-wider text-slate-400 dark:text-slate-500">
+      Avg. response
+    </span>
+    <span className="mt-1 text-2xl font-bold text-brand-600 dark:text-brand-500">
+      2 hrs
+    </span>
+  </div>
+</div>
+```
+
+**Key Features:**
+- **Horizontal Layout**: `flex flex-wrap items-center` creates a row that wraps on smaller screens
+- **Typography Hierarchy**: 
+  - Labels: `text-xs font-medium uppercase tracking-wider` (small, uppercase, wide letter spacing)
+  - Numbers: `text-2xl font-bold` (large, bold for emphasis)
+- **Visual Separators**: Vertical dividers (`h-8 w-px`) between statistics
+- **Color Scheme**: Brand color for numbers, muted gray for labels
+- **Responsive**: `flex-wrap` allows items to wrap on mobile devices
+
+**Teaching Points:**
+- Horizontal row layout with flexbox
+- Typography styling for visual hierarchy
+- Visual separators (dividers) pattern
+- Responsive design with flex-wrap
+- Dark mode support for all elements
+
+### 5.7 Form Handling (`BookingForm.jsx`)
 
 **React Hook Form:**
 ```javascript
@@ -599,7 +651,7 @@ export const validateEmail = (email) => {
 - Responsive layout patterns
 - Form organization and UX
 
-### 5.7 Custom Hooks (`useDebounce.js`)
+### 5.8 Custom Hooks (`useDebounce.js`)
 
 ```javascript
 function useDebounce(value, delay = 500) {
@@ -623,7 +675,7 @@ function useDebounce(value, delay = 500) {
 - Cleanup in useEffect (clear timeout)
 - Why debounce search? (reduce API calls)
 
-### 5.8 Custom Time Picker (`src/components/booking/TimePicker.jsx`)
+### 5.9 Custom Time Picker (`src/components/booking/TimePicker.jsx`)
 
 **Component Structure:**
 ```javascript
@@ -683,7 +735,7 @@ The project includes custom scrollbar styles in `src/styles/globals.css`:
 - State management for open/close
 - 12-hour format conversion
 
-### 5.9 Modal Body Scroll Lock (`src/components/booking/BookingModal.jsx`)
+### 5.10 Modal Body Scroll Lock (`src/components/booking/BookingModal.jsx`)
 
 **Preventing Background Scroll:**
 ```javascript
@@ -717,7 +769,7 @@ useEffect(() => {
 - Centering on large screens, top-aligned on mobile
 - Proper z-index management
 
-### 5.10 Form Validation Utilities (`src/utils/validation.js`)
+### 5.11 Form Validation Utilities (`src/utils/validation.js`)
 
 **Validation Functions:**
 ```javascript
@@ -777,7 +829,7 @@ export const validateEmail = (email) => {
 - International phone number formats
 - Validation error messages
 
-### 5.11 Animated Success Screen (`src/components/booking/BookingSuccess.jsx`)
+### 5.12 Animated Success Screen (`src/components/booking/BookingSuccess.jsx`)
 
 **Animation Pattern:**
 ```javascript
@@ -819,7 +871,7 @@ useEffect(() => {
 - Navigation after success (useNavigate)
 - Removing redundant buttons (only top close button)
 
-### 5.12 Gemini API Integration (`src/services/gemini.js`)
+### 5.13 Gemini API Integration (`src/services/gemini.js`)
 
 **Environment Variables:**
 ```javascript
@@ -902,20 +954,30 @@ if (!response) {
 
 **Flow:**
 1. ServicesPage loads → dispatches `fetchServices()`
-2. User types in search → debounced → updates filter
-3. User selects category → updates filter
-4. Filters change → triggers `fetchServices()` again
-5. Services slice filters/sorts data
-6. Pagination calculates pages
-7. ServiceCard components render
+2. Hero section displays statistics (Total services, Categories, Avg. response) in horizontal row
+3. User types in search → debounced → updates filter
+4. User selects category → updates filter
+5. Filters change → triggers `fetchServices()` again
+6. Services slice filters/sorts data
+7. Pagination calculates pages
+8. ServiceCard components render
 
 **Key Features:**
+- **Hero Section** - Statistics displayed in horizontal row with beautiful typography
+  - Large bold numbers (text-2xl font-bold) in brand color
+  - Uppercase labels with letter spacing (tracking-wider)
+  - Vertical dividers between statistics
+  - Responsive flex-wrap layout
 - **Search** - Real-time with debouncing
 - **Filters** - Category, price range, rating
 - **Sorting** - Price, rating, name
 - **Pagination** - Page-based navigation
 
 **Teaching Points:**
+- Hero section layout and statistics display
+- Horizontal row layout with flexbox
+- Typography styling (font sizes, weights, letter spacing)
+- Visual separators (dividers) between items
 - Client-side vs server-side filtering
 - Debouncing for performance
 - Pagination logic

@@ -112,6 +112,34 @@ const ServicesPage = () => {
               onChange={setSearchValue}
               count={pagination.total}
             />
+            <div className="flex flex-wrap items-center gap-6 rounded-2xl border border-slate-100 bg-white px-6 py-4 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+              <div className="flex flex-col">
+                <span className="text-xs font-medium uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                  Total services
+                </span>
+                <span className="mt-1 text-2xl font-bold text-brand-600 dark:text-brand-500">
+                  {pagination.total}
+                </span>
+              </div>
+              <div className="h-8 w-px bg-slate-200 dark:bg-slate-700" />
+              <div className="flex flex-col">
+                <span className="text-xs font-medium uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                  Categories
+                </span>
+                <span className="mt-1 text-2xl font-bold text-brand-600 dark:text-brand-500">
+                  {categories.length - 1}
+                </span>
+              </div>
+              <div className="h-8 w-px bg-slate-200 dark:bg-slate-700" />
+              <div className="flex flex-col">
+                <span className="text-xs font-medium uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                  Avg. response
+                </span>
+                <span className="mt-1 text-2xl font-bold text-brand-600 dark:text-brand-500">
+                  2 hrs
+                </span>
+              </div>
+            </div>
           </div>
           <div className="grid gap-4">
             <div className="relative overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-soft dark:border-slate-800 dark:bg-slate-900">
@@ -125,32 +153,6 @@ const ServicesPage = () => {
               <div className="absolute bottom-4 left-4 space-y-1 text-white">
                 <p className="text-xs uppercase tracking-widest">Top rated</p>
                 <p className="text-lg font-semibold">Wellness &amp; Care</p>
-              </div>
-            </div>
-            <div className="grid gap-3 rounded-2xl border border-slate-100 bg-white p-4 text-sm shadow-soft dark:border-slate-800 dark:bg-slate-900">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-slate-500">
-                  Total services
-                </span>
-                <span className="text-lg font-semibold text-brand-600">
-                  {pagination.total}
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-slate-500">
-                  Categories
-                </span>
-                <span className="text-lg font-semibold text-slate-900 dark:text-white">
-                  {categories.length - 1}
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-slate-500">
-                  Avg. response
-                </span>
-                <span className="text-lg font-semibold text-slate-900 dark:text-white">
-                  2 hrs
-                </span>
               </div>
             </div>
           </div>

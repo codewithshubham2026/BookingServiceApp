@@ -73,6 +73,7 @@ The following files have been enhanced with detailed comments for teaching:
 - `src/components/layout/Navbar.jsx` - Navigation with conditional rendering
 - `src/components/auth/ProtectedRoute.jsx` - Route guard pattern
 - `src/components/services/SearchBar.jsx` - Controlled component pattern
+- `src/pages/ServicesPage.jsx` - Hero section with statistics in horizontal row layout
 - `src/components/booking/BookingModal.jsx` - Scrollable modal with body scroll lock
 - `src/components/booking/BookingForm.jsx` - Two-column form layout with comprehensive validation
 - `src/components/booking/DatePicker.jsx` - Custom calendar component
@@ -134,8 +135,9 @@ The following files have been enhanced with detailed comments for teaching:
 
 2. **Service Listing** (30 min)
    - Code: ServicesPage, FilterBar
-   - Explain: Search, filters, pagination
+   - Explain: Hero section with statistics, search, filters, pagination
    - Reference: TEACHING_GUIDE.md Section 6.2
+   - Features: Statistics displayed in horizontal row with beautiful typography
 
 ### Session 5: Advanced Features & Deployment (1 hour)
 1. **Booking Flow** (30 min)

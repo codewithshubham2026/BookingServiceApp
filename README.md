@@ -9,7 +9,7 @@ Live Deployment Link - https://booking-service-app-sigma.vercel.app
   - Default credentials: `user@example.com` / `password123`
   - Protected routes for authenticated features
   - Persistent authentication state with localStorage
-- **Service Listing**: Search, filters, sorting, pagination, loading and empty states
+- **Service Listing**: Hero section with statistics, search, filters, sorting, pagination, loading and empty states
 - **Custom UI Components**: Beautiful dropdown component with animations and keyboard navigation
 - **Service Details**: Gallery, highlights, and related services
 - **Booking Flow**: React Hook Form, custom calendar date picker, custom time picker, and localStorage persistence
@@ -106,6 +106,7 @@ Live Deployment Link - https://booking-service-app-sigma.vercel.app
 - **ServiceCard**: Service listing card with favorite toggle
 - **FilterBar**: Advanced filtering with custom dropdowns
 - **SearchBar**: Real-time search with debouncing
+- **Hero Section**: Statistics display (Total services, Categories, Avg. response) in horizontal row layout with beautiful typography
 
 ### Booking
 - **BookingModal**: Scrollable modal with body scroll lock, prevents background scrolling
