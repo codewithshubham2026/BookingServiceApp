@@ -306,7 +306,10 @@ booking_service_app/
 2. **Create BookingForm** (`src/components/booking/BookingForm.jsx`)
    - Form with React Hook Form
    - Two-column layout: inputs on left, date picker on right
-   - Form validation with error messages
+   - Comprehensive JavaScript-level form validation
+   - Phone field input restrictions (prevents text entry)
+   - Input maxLength restrictions for all fields
+   - Form validation with clear error messages
 
 3. **Create DatePicker** (`src/components/booking/DatePicker.jsx`)
    - Custom date selection component
@@ -513,8 +516,37 @@ const ServiceCard = ({
 ```javascript
 const { register, control, handleSubmit, formState: { errors } } = useForm()
 
-// Register input
-<input {...register("name", { required: "Name is required" })} />
+// Register input with validation
+<input 
+  {...register("name", { validate: validateName })} 
+  maxLength={100}
+/>
+
+// Controller for phone with input restrictions
+<Controller
+  control={control}
+  name="phone"
+  rules={{ validate: validatePhone }}
+  render={({ field }) => (
+    <input
+      type="tel"
+      maxLength={13}
+      value={field.value || ""}
+      onKeyDown={(e) => {
+        // Prevent invalid characters from being typed
+        const key = e.key
+        if (!/[\d\s()-]/.test(key) && key !== "+") {
+          e.preventDefault()
+        }
+      }}
+      onChange={(e) => {
+        // Filter pasted content
+        let value = e.target.value.replace(/[^\d+\s()-]/g, "")
+        field.onChange(value)
+      }}
+    />
+  )}
+/>
 
 // Controller for custom components (DatePicker and TimePicker)
 <Controller
@@ -523,13 +555,25 @@ const { register, control, handleSubmit, formState: { errors } } = useForm()
   rules={{ required: "Date is required" }}
   render={({ field }) => <DatePicker value={field.value} onChange={field.onChange} />}
 />
+```
 
-<Controller
-  control={control}
-  name="time"
-  rules={{ required: "Time is required" }}
-  render={({ field }) => <TimePicker value={field.value} onChange={field.onChange} />}
-/>
+**Validation Utilities (`src/utils/validation.js`):**
+```javascript
+export const validatePhone = (phone) => {
+  // Validates international phone format
+  // Minimum 7 digits, maximum 13 digits for international
+  // Supports + prefix for country codes
+}
+
+export const validateName = (name) => {
+  // Validates name: 2-100 characters
+  // Only letters, spaces, hyphens, apostrophes
+}
+
+export const validateEmail = (email) => {
+  // Validates email format
+  // Maximum 255 characters
+}
 ```
 
 **Layout Structure:**
@@ -538,12 +582,20 @@ const { register, control, handleSubmit, formState: { errors } } = useForm()
 - Right column: Date picker calendar
 - Responsive: Stacks vertically on mobile
 
+**Input Restrictions:**
+- **Name**: maxLength 100, only letters/spaces/hyphens/apostrophes
+- **Email**: maxLength 255, email format validation
+- **Phone**: maxLength 13, input restrictions prevent text entry
+- **Notes**: maxLength 500, optional field
+
 **Teaching Points:**
 - Why React Hook Form? (performance, less re-renders)
 - `register` - Connects input to form state
-- `Controller` - For custom components (DatePicker, TimePicker)
-- Validation rules
-- Error handling
+- `Controller` - For custom components and controlled inputs
+- Custom validation functions
+- Input restrictions with `onKeyDown` and `onChange`
+- `maxLength` attributes for user experience
+- Error handling and validation messages
 - Responsive layout patterns
 - Form organization and UX
 
@@ -665,7 +717,67 @@ useEffect(() => {
 - Centering on large screens, top-aligned on mobile
 - Proper z-index management
 
-### 5.10 Animated Success Screen (`src/components/booking/BookingSuccess.jsx`)
+### 5.10 Form Validation Utilities (`src/utils/validation.js`)
+
+**Validation Functions:**
+```javascript
+export const validatePhone = (phone) => {
+  // Validates international phone numbers
+  // Supports + prefix for country codes
+  // Minimum 7 digits, maximum 13 digits for international format
+  // Allows spaces, dashes, parentheses for formatting
+  // Returns error message string or true if valid
+}
+
+export const validateName = (name) => {
+  // Validates full name
+  // Minimum 2 characters, maximum 100 characters
+  // Only letters, spaces, hyphens, and apostrophes allowed
+}
+
+export const validateEmail = (email) => {
+  // Validates email format
+  // Standard email regex pattern
+  // Maximum 255 characters
+}
+```
+
+**Phone Input Restrictions:**
+```javascript
+// In BookingForm.jsx
+<Controller
+  name="phone"
+  render={({ field }) => (
+    <input
+      type="tel"
+      maxLength={13}
+      onKeyDown={(e) => {
+        // Prevents invalid characters from being typed
+        const key = e.key
+        if (!/[\d\s()-]/.test(key) && key !== "+") {
+          e.preventDefault()
+        }
+      }}
+      onChange={(e) => {
+        // Filters pasted content
+        let value = e.target.value.replace(/[^\d+\s()-]/g, "")
+        field.onChange(value)
+      }}
+    />
+  )}
+/>
+```
+
+**Teaching Points:**
+- Reusable validation functions
+- Input restrictions vs. validation (prevent vs. validate)
+- `onKeyDown` for preventing invalid input
+- `onChange` for filtering pasted content
+- `maxLength` attributes for UX
+- International phone number formats
+- Validation error messages
+
+### 5.11 Animated Success Screen (`src/components/booking/BookingSuccess.jsx`)
 
 **Animation Pattern:**
 ```javascript
@@ -707,7 +819,7 @@ useEffect(() => {
 - Navigation after success (useNavigate)
 - Removing redundant buttons (only top close button)
 
-### 5.11 Gemini API Integration (`src/services/gemini.js`)
+### 5.12 Gemini API Integration (`src/services/gemini.js`)
 
 **Environment Variables:**
 ```javascript
@@ -819,24 +931,34 @@ if (!response) {
 5. User fills form with two-column layout:
    - Left: Personal info inputs (name, email, phone, time, notes)
    - Right: Date picker calendar
-6. User selects time using custom TimePicker dropdown
-7. On submit → dispatches `createBooking()`
-8. Booking saved to Redux and localStorage
-9. Shows animated success screen with green checkmark
-10. User can click "View My Bookings" to navigate to bookings page
-11. Modal closes
+6. **Form Validation**:
+   - Name: Validates 2-100 characters, only letters/spaces/hyphens/apostrophes
+   - Email: Validates email format, max 255 characters
+   - Phone: Input restrictions prevent text entry, validates 7-13 digits
+   - Time: Required selection from TimePicker
+   - Date: Required selection from DatePicker
+7. User selects time using custom TimePicker dropdown
+8. On submit → validates all fields → dispatches `createBooking()`
+9. Booking saved to Redux and localStorage
+10. Shows animated success screen with green checkmark
+11. User can click "View My Bookings" to navigate to bookings page
+12. Modal closes
 
 **Key Components:**
 - `BookingModal.jsx` - Scrollable modal wrapper with body scroll lock
-- `BookingForm.jsx` - Two-column form layout with validation
+- `BookingForm.jsx` - Two-column form layout with comprehensive validation
 - `DatePicker.jsx` - Custom calendar with month navigation
 - `TimePicker.jsx` - Custom time picker with hour/minute dropdown
 - `BookingSuccess.jsx` - Animated success screen with checkmark
+- `validation.js` - Reusable validation utility functions
 
 **Key Features:**
 - **Modal Layout**: Scrollable content, proper spacing, responsive design
 - **Body Scroll Lock**: Prevents background scrolling when modal is open
 - **Two-Column Layout**: Inputs on left, date picker on right for better UX
+- **Form Validation**: JavaScript-level validation for all fields
+- **Phone Input Restrictions**: Prevents text entry, allows only digits and formatting characters
+- **Input Restrictions**: maxLength attributes (name: 100, email: 255, phone: 13, notes: 500)
 - **Custom Time Picker**: Dropdown with hour (0-23) and minute (15-min intervals) selection
 - **Animated Success**: Green checkmark with scale and path drawing animations
 - **Navigation**: Direct link to bookings page after confirmation
@@ -844,11 +966,14 @@ if (!response) {
 **Teaching Points:**
 - Modal pattern (portal, focus trap, body scroll lock)
 - Form validation strategies with React Hook Form
+- Input restrictions with `onKeyDown` and `onChange` handlers
+- Custom validation functions and reusable utilities
 - Date and time handling
 - Custom component design (DatePicker, TimePicker)
 - Animation patterns with Framer Motion
 - Success feedback and user flow
 - Navigation after form submission
+- User experience: preventing invalid input vs. showing errors
 
 ### 6.4 Favorites System
 

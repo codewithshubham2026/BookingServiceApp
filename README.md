@@ -16,6 +16,8 @@ Live Deployment Link - https://booking-service-app-sigma.vercel.app
   - Authentication required to book services
   - Scrollable modal with body scroll lock
   - Two-column layout (inputs on left, date picker on right)
+  - Comprehensive form validation with JavaScript-level validation
+  - Phone field input restrictions (prevents text entry, allows only digits and formatting characters)
   - Animated success confirmation with green checkmark
   - Direct navigation to bookings page after confirmation
 - **Favorites**: Save services to favorites with localStorage persistence
@@ -37,7 +39,7 @@ Live Deployment Link - https://booking-service-app-sigma.vercel.app
 - `src/services` - API service layer (mock data)
 - `src/hooks` - Custom React hooks
 - `src/data` - Static JSON data files
-- `src/utils` - Utility functions
+- `src/utils` - Utility functions (formatting, validation, filtering)
 - `src/styles` - Global styles and CSS
 
 ## Routes
@@ -108,9 +110,13 @@ Live Deployment Link - https://booking-service-app-sigma.vercel.app
 ### Booking
 - **BookingModal**: Scrollable modal with body scroll lock, prevents background scrolling
 - **BookingForm**: Two-column layout with inputs on left, date picker on right
+  - JavaScript-level form validation for all fields
+  - Phone field with input restrictions (prevents text entry)
+  - Input maxLength restrictions (name: 100, email: 255, phone: 13, notes: 500)
 - **DatePicker**: Custom calendar component with month navigation
 - **TimePicker**: Custom time picker with hour/minute selection dropdown
 - **BookingSuccess**: Animated success screen with green checkmark animation and navigation to bookings page
+- **Validation Utilities**: Reusable validation functions for phone, name, and email
 
 ## Interview and Real-world Discussion Points
 - Tradeoffs of client-side filtering vs server-side filtering
