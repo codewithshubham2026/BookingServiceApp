@@ -1,6 +1,7 @@
 import { Controller, useForm } from "react-hook-form"
 import Button from "../ui/Button"
 import { formatCurrency } from "../../utils/format"
+import { validatePhone, validateName, validateEmail } from "../../utils/validation"
 import DatePicker from "./DatePicker"
 import TimePicker from "./TimePicker"
 
@@ -35,7 +36,11 @@ const BookingForm = ({ service, onSubmit, isLoading, error }) => {
             <input
               className={inputStyles}
               placeholder="Alex Johnson"
-              {...register("name", { required: "Name is required" })}
+              type="text"
+              maxLength={100}
+              {...register("name", {
+                validate: validateName,
+              })}
             />
             {errors.name ? (
               <span className="text-xs text-rose-500">{errors.name.message}</span>
@@ -47,7 +52,10 @@ const BookingForm = ({ service, onSubmit, isLoading, error }) => {
               className={inputStyles}
               placeholder="alex@email.com"
               type="email"
-              {...register("email", { required: "Email is required" })}
+              maxLength={255}
+              {...register("email", {
+                validate: validateEmail,
+              })}
             />
             {errors.email ? (
               <span className="text-xs text-rose-500">
@@ -60,7 +68,11 @@ const BookingForm = ({ service, onSubmit, isLoading, error }) => {
             <input
               className={inputStyles}
               placeholder="+1 (000) 123-4567"
-              {...register("phone", { required: "Phone is required" })}
+              type="tel"
+              maxLength={20}
+              {...register("phone", {
+                validate: validatePhone,
+              })}
             />
             {errors.phone ? (
               <span className="text-xs text-rose-500">
@@ -87,6 +99,8 @@ const BookingForm = ({ service, onSubmit, isLoading, error }) => {
             <input
               className={inputStyles}
               placeholder="Any special request?"
+              type="text"
+              maxLength={500}
               {...register("notes")}
             />
           </div>
