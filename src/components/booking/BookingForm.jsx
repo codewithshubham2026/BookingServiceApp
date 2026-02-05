@@ -65,14 +65,56 @@ const BookingForm = ({ service, onSubmit, isLoading, error }) => {
           </div>
           <div className="flex flex-col gap-1 text-sm">
             <label className="text-xs font-semibold text-slate-500">Phone</label>
-            <input
-              className={inputStyles}
-              placeholder="+1 (000) 123-4567"
-              type="tel"
-              maxLength={20}
-              {...register("phone", {
-                validate: validatePhone,
-              })}
+            <Controller
+              control={control}
+              name="phone"
+              rules={{ validate: validatePhone }}
+              render={({ field }) => (
+                <input
+                  className={inputStyles}
+                  placeholder="+1 (000) 123-4567"
+                  type="tel"
+                  maxLength={13}
+                  value={field.value || ""}
+                  onKeyDown={(e) => {
+                    const key = e.key
+                    const value = e.target.value
+                    const cursorPos = e.target.selectionStart
+                    
+                    if (key === "Backspace" || key === "Delete" || key === "ArrowLeft" || key === "ArrowRight" || key === "Tab" || key === "Home" || key === "End") {
+                      return
+                    }
+                    
+                    if (key === "+" && cursorPos === 0 && !value.startsWith("+")) {
+                      return
+                    }
+                    
+                    if (key === "+" && cursorPos !== 0) {
+                      e.preventDefault()
+                      return
+                    }
+                    
+                    if (!/[\d\s()-]/.test(key) && !e.ctrlKey && !e.metaKey) {
+                      e.preventDefault()
+                    }
+                  }}
+                  onChange={(e) => {
+                    let value = e.target.value
+                    value = value.replace(/[^\d+\s()-]/g, "")
+                    
+                    if (value.startsWith("+")) {
+                      const afterPlus = value.slice(1).replace(/[^\d\s()-]/g, "")
+                      value = "+" + afterPlus
+                    } else {
+                      value = value.replace(/[^\d\s()-]/g, "")
+                    }
+                    
+                    field.onChange(value)
+                  }}
+                  onBlur={field.onBlur}
+                  ref={field.ref}
+                />
+              )}
             />
             {errors.phone ? (
               <span className="text-xs text-rose-500">

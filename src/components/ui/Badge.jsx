@@ -6,7 +6,7 @@ const tones = {
 
 const Badge = ({ children, tone = "neutral" }) => (
   <span
-    className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${tones[tone]}`}
+    className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${tones[tone]} max-w-fit`}
   >
     {children}
   </span>

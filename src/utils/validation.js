@@ -10,8 +10,8 @@ export const validatePhone = (phone) => {
     if (digitsOnly.length < 7) {
       return "Phone number must be at least 7 digits"
     }
-    if (digitsOnly.length > 15) {
-      return "Phone number cannot exceed 15 digits (international format)"
+    if (digitsOnly.length > 13) {
+      return "Phone number cannot exceed 13 digits (international format)"
     }
     if (!/^\+[1-9]\d{6,14}$/.test(cleaned.replace(/[\s()-]/g, ""))) {
       return "Invalid international phone format. Use + followed by country code and number"
