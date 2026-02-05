@@ -2,6 +2,8 @@
 
 Teaching-friendly React (JSX) project with mock APIs, Redux Toolkit, and Tailwind CSS.
 
+Live Deployment Link - https://booking-service-app-sigma.vercel.app
+
 ## Features
 - **Authentication System**: Login and Register pages with password visibility toggle
   - Default credentials: `user@example.com` / `password123`
